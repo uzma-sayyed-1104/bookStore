@@ -3,7 +3,7 @@ import path from "path";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import bookRoute from "./routes/book.route.js";
+import bookRoute from "./route/book.route.js";
 
 dotenv.config();
 
