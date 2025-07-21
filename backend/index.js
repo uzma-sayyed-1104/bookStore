@@ -1,24 +1,35 @@
-//index.js
 import express from "express";
+import path from "path";
+import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import cors from "cors";
-import bookRoute from "./route/book.route.js";
-import userRoute from "./route/user.route.js";
+import bookRoute from "./routes/book.route.js";
 
-const app = express();
-app.use(cors());
-app.use(express.json());
 dotenv.config();
 
-const PORT = process.env.PORT || 4000;
-const URL = process.env.MongoDBURL;
+const app = express();
+const PORT = process.env.PORT || 10000;
 
-// connect to MongoDB (cleaned version)
-mongoose.connect(URL)
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((error) => console.log("Error connecting to MongoDB:", error));
+// Middlewares
+app.use(cors());
+app.use(express.json());
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Routes
+app.use("/book", bookRoute);
+
+// Static Files (for React frontend build)
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "frontend", "dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 });
+
+// Connect DB and start server
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB connected");
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch(err => console.log("DB Connection Error: ", err));
+
