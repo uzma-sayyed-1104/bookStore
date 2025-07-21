@@ -17,13 +17,7 @@ app.use(express.json());
 // Routes
 app.use("/book", bookRoute);
 
-// Static Files (for React frontend build)
-const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, "frontend", "dist")));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
-});
 
 // Connect DB and start server
 mongoose.connect(process.env.MONGO_URI)
