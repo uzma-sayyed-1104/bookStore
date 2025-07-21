@@ -21,7 +21,7 @@ function Signup() {
             email: data.email,
             password: data.password
         };
-        await axios.post("http://localhost:4001/user/signup", useruserInfo)
+        await axios.post("https://bookstoreapp-backend-djr2.onrender.com/user/signup", useruserInfo)
         .then((res) => {
           console.log("✅ Server response:", res.data);
           if (res.data.user) {
